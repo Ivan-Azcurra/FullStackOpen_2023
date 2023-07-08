@@ -3,31 +3,35 @@ import ReactDOM from "react-dom";
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
-
-const Statistics = ({text, value}) => {
+const Statistics = ({ text, value }) => {
   return (
     <>
-      <p>{text}  {value}</p> 
+      <p>
+        {text} {value}
+      </p>
     </>
   );
 };
 
 const App = () => {
   // save clicks of each button to its own state
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const [clicks, setClicks] = useState({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+    total: 0
+  });
 
   const increaseGood = () => {
-    setGood(good + 1);
+    setClicks({ ...clicks, good: clicks.good + 1, total: clicks.total + 1});
   };
 
   const increaseNeutral = () => {
-    setNeutral(neutral + 1);
+    setClicks({ ...clicks, neutral: clicks.neutral + 1, total: clicks.total + 1 });
   };
 
   const increaseBad = () => {
-    setBad(bad + 1);
+    setClicks({ ...clicks, bad: clicks.bad + 1,  total: clicks.total + 1 });
   };
 
   return (
@@ -37,9 +41,12 @@ const App = () => {
       <Button onClick={increaseNeutral} text={"neutral"} />
       <Button onClick={increaseBad} text={"bad"} />
       <h1>statistics</h1>
-      <Statistics text={"good"} value={good}/>
-      <Statistics text={"neutral"} value={neutral}/>
-      <Statistics text={"bad"} value={bad}/>
+      <Statistics text={"good"} value={clicks.good} />
+      <Statistics text={"neutral"} value={clicks.neutral} />
+      <Statistics text={"bad"} value={clicks.bad} />
+      <Statistics text={"all"}  value={clicks.total}/>
+      <Statistics text={"average"} value={(clicks.good * 1 + clicks.bad * -1) / clicks.total}/>
+      <Statistics text={"positive"}  value={clicks.good * (100/clicks.total)}/>
     </div>
   );
 };
