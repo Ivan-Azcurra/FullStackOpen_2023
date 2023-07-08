@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 const Header = (props) => <h1>{props.header}</h1>;
 
-const Statistic = ({ text, value }) => (
+const StatisticLine = ({ text, value }) => (
   <p>
     {text} {value}
   </p>
@@ -20,15 +20,15 @@ const Statistics = ({ clicks }) => {
     
   return (
       <>
-        <Statistic text={"good"} value={clicks.good} />
-        <Statistic text={"neutral"} value={clicks.neutral} />
-        <Statistic text={"bad"} value={clicks.bad} />
-        <Statistic text={"all"} value={clicks.total} />
-        <Statistic
+        <StatisticLine text={"good"} value={clicks.good} />
+        <StatisticLine text={"neutral"} value={clicks.neutral} />
+        <StatisticLine text={"bad"} value={clicks.bad} />
+        <StatisticLine text={"all"} value={clicks.total} />
+        <StatisticLine
           text={"average"}
           value={(clicks.good * 1 + clicks.bad * -1) / clicks.total}
         />
-        <Statistic
+        <StatisticLine
           text={"positive"}
           value={clicks.good * (100 / clicks.total)}
         />
