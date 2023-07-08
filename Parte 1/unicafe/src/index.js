@@ -3,14 +3,38 @@ import ReactDOM from "react-dom";
 
 const Header = (props) => <h1>{props.header}</h1>;
 
-const Statistics = ({ text, value }) => {
+const Statistic = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+);
+
+const Statistics = ({ clicks }) => {
+  if (clicks.total === 0) {
+    return (
+    <div>
+      <p>No feedback given</p>;
+    </div>
+    )
+  } 
+    
   return (
-    <>
-      <p>
-        {text} {value}
-      </p>
-    </>
-  );
+      <>
+        <Statistic text={"good"} value={clicks.good} />
+        <Statistic text={"neutral"} value={clicks.neutral} />
+        <Statistic text={"bad"} value={clicks.bad} />
+        <Statistic text={"all"} value={clicks.total} />
+        <Statistic
+          text={"average"}
+          value={(clicks.good * 1 + clicks.bad * -1) / clicks.total}
+        />
+        <Statistic
+          text={"positive"}
+          value={clicks.good * (100 / clicks.total)}
+        />
+      </>
+    );
+  
 };
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
@@ -47,18 +71,7 @@ const App = () => {
       <Button onClick={increaseNeutral} text={"neutral"} />
       <Button onClick={increaseBad} text={"bad"} />
       <Header header="statistics" />
-      <Statistics text={"good"} value={clicks.good} />
-      <Statistics text={"neutral"} value={clicks.neutral} />
-      <Statistics text={"bad"} value={clicks.bad} />
-      <Statistics text={"all"} value={clicks.total} />
-      <Statistics
-        text={"average"}
-        value={(clicks.good * 1 + clicks.bad * -1) / clicks.total}
-      />
-      <Statistics
-        text={"positive"}
-        value={clicks.good * (100 / clicks.total)}
-      />
+      <Statistics clicks={clicks}/>
     </div>
   );
 };
