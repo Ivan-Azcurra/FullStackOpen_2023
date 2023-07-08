@@ -1,40 +1,50 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 const Header = (props) => <h1>{props.header}</h1>;
 
-const StatisticLine = ({ text, value }) => (
-  <p>
-    {text} {value}
-  </p>
-);
+const StatisticLine = ({ text, value }) => {
+  if (text === "positive") {
+    return (
+      <tr>
+        <td>{text}</td>
+        <td>{value}%</td>
+      </tr>
+    );
+  }
+
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  );
+};
 
 const Statistics = ({ clicks }) => {
+  const average = (clicks.good * 1 + clicks.bad * -1) / clicks.total;
+  const positive = clicks.good * (100 / clicks.total);
+
   if (clicks.total === 0) {
     return (
-    <div>
-      <p>No feedback given</p>;
-    </div>
-    )
-  } 
-    
+      <div>
+        <p>No feedback given</p>
+      </div>
+    );
+  }
+
   return (
-      <>
+    <table>
+      <tbody>
         <StatisticLine text={"good"} value={clicks.good} />
         <StatisticLine text={"neutral"} value={clicks.neutral} />
         <StatisticLine text={"bad"} value={clicks.bad} />
         <StatisticLine text={"all"} value={clicks.total} />
-        <StatisticLine
-          text={"average"}
-          value={(clicks.good * 1 + clicks.bad * -1) / clicks.total}
-        />
-        <StatisticLine
-          text={"positive"}
-          value={clicks.good * (100 / clicks.total)}
-        />
-      </>
-    );
-  
+        <StatisticLine text={"average"} value={average} />
+        <StatisticLine text={"positive"} value={positive} />
+      </tbody>
+    </table>
+  );
 };
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
@@ -71,9 +81,11 @@ const App = () => {
       <Button onClick={increaseNeutral} text={"neutral"} />
       <Button onClick={increaseBad} text={"bad"} />
       <Header header="statistics" />
-      <Statistics clicks={clicks}/>
+      <Statistics clicks={clicks} />
     </div>
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const domNode = document.getElementById("root");
+const root = createRoot(domNode);
+root.render(<App />);
