@@ -1,25 +1,36 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
-const Button = ({ changeAnecdote, text }) => (
-  <button onClick={changeAnecdote}>{text}</button>
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>{text}</button>
 );
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
-  let index = selected;
-  const randomIndex = () => Math.floor(Math.random() * props.anecdotes.length);
+  const [ponits, setPoints] = useState(Array(props.anecdotes.length).fill(0));
 
   const changeAnecdote = () => {
-    setSelected(index = randomIndex());
+    const index = Math.floor(Math.random() * props.anecdotes.length);
+    setSelected(index);
     console.log(index);
+  };
+
+  const increaseVote = () => {
+    const newPoints = [...ponits];
+    newPoints[selected] += 1;
+    //le pasamos el nuevo array copiado de ...points, modificado
+    setPoints(newPoints);
+    console.log(ponits[selected]);
   };
 
   return (
     <div>
-      {props.anecdotes[index]}
+      {props.anecdotes[selected]}
       <br />
-      <Button changeAnecdote={changeAnecdote} text="next anecdote" />
+      has {ponits[selected]} votes
+      <br />
+      <Button onClick={increaseVote} text={"vote"} />
+      <Button onClick={changeAnecdote} text="next anecdote" />
     </div>
   );
 };
